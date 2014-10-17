@@ -1,0 +1,7 @@
+.idea/
+target/
+*.iml
+.gradle/
+build/
+gradle/
+app/src/main/webapp/apidoc/
