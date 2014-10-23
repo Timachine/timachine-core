@@ -1,0 +1,3 @@
+[submodule "swagger-ui"]
+	path = swagger-ui
+	url = git@192.168.140.36:my-number/swagger-ui.git
