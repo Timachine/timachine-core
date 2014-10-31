@@ -5,3 +5,6 @@ target/
 build/
 gradle/
 app/src/main/webapp/apidoc/
+.project
+.classpath
+.settings/
