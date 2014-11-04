@@ -11,6 +11,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class DynamoTest {
     }
 
     @BeforeClass
-    public static void initLocal() {
+    public static void initLocal() throws IOException {
         DynamoLocalInstance.start();
 
         opt = new Options();
