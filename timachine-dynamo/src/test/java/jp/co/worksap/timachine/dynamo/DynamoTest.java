@@ -38,7 +38,7 @@ public class DynamoTest {
     }
 
     @AfterClass
-    public static void closeLocal() {
+    public static void closeLocal() throws InterruptedException {
         DynamoLocalInstance.end();
     }
 
