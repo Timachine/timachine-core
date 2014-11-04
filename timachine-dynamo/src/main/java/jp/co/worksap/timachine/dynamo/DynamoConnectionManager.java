@@ -2,7 +2,6 @@ package jp.co.worksap.timachine.dynamo;
 
 
 import jp.co.worksap.dynamo.Dynamo;
-import jp.co.worksap.dynamo.DynamoOnline;
 
 /**
  * @author david
@@ -11,10 +10,6 @@ import jp.co.worksap.dynamo.DynamoOnline;
  */
 public class DynamoConnectionManager {
 
-    public static Dynamo dynamo = DynamoOnline.instance();
-
-    static void close() {
-        dynamo.close();
-    }
+    static Dynamo dynamo;
 
 }
