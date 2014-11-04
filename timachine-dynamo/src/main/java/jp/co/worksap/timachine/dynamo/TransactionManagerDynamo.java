@@ -1,5 +1,6 @@
 package jp.co.worksap.timachine.dynamo;
 
+import jp.co.worksap.dynamo.DynamoOnline;
 import jp.co.worksap.timachine.spi.TransactionManager;
 
 /**
@@ -15,6 +16,7 @@ public class TransactionManagerDynamo implements TransactionManager {
 
     @Override
     public void begin() {
+        DynamoConnectionManager.dynamo = new DynamoOnline();
     }
 
     @Override
@@ -29,6 +31,6 @@ public class TransactionManagerDynamo implements TransactionManager {
 
     @Override
     public void close() {
-        DynamoConnectionManager.close();
+        DynamoConnectionManager.dynamo.close();
     }
 }
