@@ -23,7 +23,6 @@ public class Migrations {
             versions.add(migration.getSimpleName());
             migrationsMap.put(migration.getSimpleName(), migration);
         }
-        Collections.sort(versions);
     }
 
     public Class<? extends Migration> migration(String name) {
