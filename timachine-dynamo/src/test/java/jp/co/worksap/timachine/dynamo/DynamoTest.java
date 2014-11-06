@@ -2,10 +2,9 @@ package jp.co.worksap.timachine.dynamo;
 
 import jp.co.worksap.dynamo.DynamoLocalInstance;
 import jp.co.worksap.timachine.Executor;
-import jp.co.worksap.timachine.dynamo.migrations.M1;
-import jp.co.worksap.timachine.dynamo.migrations.M2;
+import jp.co.worksap.timachine.dynamo.migrations.M20141106173530;
+import jp.co.worksap.timachine.dynamo.migrations.M20141107173530;
 import jp.co.worksap.timachine.model.Options;
-import jp.co.worksap.timachine.spi.Migration;
 import jp.co.worksap.timachine.spi.VersionProvider;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -21,13 +20,13 @@ import java.util.List;
  * @since 10-13-2014
  */
 public class DynamoTest {
-    private static final List<Class<? extends Migration>> migrations;
+    private static final List<Class<?>> migrations;
 
 
     static {
         migrations = new ArrayList<>();
-        migrations.add(M1.class);
-        migrations.add(M2.class);
+        migrations.add(M20141106173530.class);
+        migrations.add(M20141107173530.class);
     }
 
     @BeforeClass
@@ -35,7 +34,7 @@ public class DynamoTest {
         DynamoLocalInstance.start();
 
         opt = new Options();
-        opt.setToVersion("M2");
+        opt.setToVersion("M20141107173530");
     }
 
     @AfterClass

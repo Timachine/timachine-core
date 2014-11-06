@@ -2,19 +2,21 @@ package jp.co.worksap.timachine.dynamo.migrations;
 
 import jp.co.worksap.dynamo.DynamoUtil;
 import jp.co.worksap.timachine.dynamo.DynamoMigration;
-import jp.co.worksap.timachine.model.Revocable;
+import jp.co.worksap.timachine.model.Down;
+import jp.co.worksap.timachine.model.Migration;
+import jp.co.worksap.timachine.model.Up;
 
-@Revocable
-public class M1 extends DynamoMigration {
+@Migration
+public class M20141106173530 extends DynamoMigration {
 
-    @Override
+    @Up
     public void up() {
         dynamo().createTable("user", DynamoUtil.createThroughput(1L, 1L), DynamoUtil.createAttrList("number", "N"), DynamoUtil.createKeyElementList("number", "HASH"));
         System.out.println("M1 Dynamo up");
     }
 
 
-    @Override
+    @Down
     public void down() {
         dynamo().deleteTable("user");
     }

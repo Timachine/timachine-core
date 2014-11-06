@@ -2,7 +2,6 @@ package jp.co.worksap.timachine;
 
 import jp.co.worksap.timachine.migrations.*;
 import jp.co.worksap.timachine.model.Options;
-import jp.co.worksap.timachine.spi.Migration;
 import jp.co.worksap.timachine.spi.TransactionManager;
 import jp.co.worksap.timachine.spi.VersionProvider;
 import lombok.Setter;
@@ -20,16 +19,16 @@ import static org.junit.Assert.assertEquals;
  */
 public class TimachineTest {
 
-    private static final List<Class<? extends Migration>> migrations;
+    private static final List<Class<?>> migrations;
 
 
     static {
         migrations = new ArrayList<>();
-        migrations.add(M1.class);
-        migrations.add(M2.class);
-        migrations.add(M3.class);
-        migrations.add(M4.class);
-        migrations.add(M5.class);
+        migrations.add(M20141106171530.class);
+        migrations.add(M20141106171531.class);
+        migrations.add(M20141106171532.class);
+        migrations.add(M20141106171533WithSomeName.class);
+        migrations.add(M20141106171534.class);
     }
 
     @Rule
@@ -71,7 +70,7 @@ public class TimachineTest {
 
     @Test
     public void testUp() throws Exception {
-        versionProvider.setCurrentVersion("M2");
+        versionProvider.setCurrentVersion("M20141106171531");
         Executor executor = new Executor(transactionManager, versionProvider);
         Options options = new Options();
         executor.execute(options, migrations);
@@ -80,7 +79,7 @@ public class TimachineTest {
 
     @Test
     public void testUpIrrevocable() throws Exception {
-        versionProvider.setCurrentVersion("M1");
+        versionProvider.setCurrentVersion("M20141106171530");
         Executor executor = new Executor(transactionManager, versionProvider);
         Options options = new Options();
         executor.execute(options, migrations);
@@ -89,20 +88,20 @@ public class TimachineTest {
 
     @Test
     public void testDown() throws Exception {
-        versionProvider.setCurrentVersion("M5");
+        versionProvider.setCurrentVersion("M20141106171534");
         Executor executor = new Executor(transactionManager, versionProvider);
         Options options = new Options();
-        options.setToVersion("M2");
+        options.setToVersion("M20141106171531");
         executor.execute(options, migrations);
         assertEquals("down 5\ndown 4\ndown 3\n", log.getLog());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testDownIrrevocable() throws Exception {
-        versionProvider.setCurrentVersion("M5");
+        versionProvider.setCurrentVersion("M20141106171534");
         Executor executor = new Executor(transactionManager, versionProvider);
         Options options = new Options();
-        options.setToVersion("M1");
+        options.setToVersion("M20141106171530");
         executor.execute(options, migrations);
     }
 }
