@@ -2,6 +2,8 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
+import jp.co.worksap.timachine.MigrationNameResolver;
+import jp.co.worksap.timachine.MigrationType;
 import lombok.Getter;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -15,8 +17,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by liuyang on 14-11-6.
@@ -45,13 +45,12 @@ public class TimachineMojo extends AbstractMojo {
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.DEBUG_HANDLER);
         try {
             Template template = cfg.getTemplate(templateName + ".ftl");
-            String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-            this.className = "M" + timestamp;
             String name = System.getProperty("name");
-            if (name == null) {
-                name = "";
+            String type = System.getProperty("type");
+            if (type == null) {
+                type = "MAIN";
             }
-            this.className += name;
+            this.className = MigrationNameResolver.generateClassName(name, MigrationType.valueOf(type));
             String[] splitted = packageName.split("[.]");
             Path path = Paths.get(sourceDir, splitted).resolve(this.className + ".java");
             BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
