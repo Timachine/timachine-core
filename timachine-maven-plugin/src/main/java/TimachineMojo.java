@@ -24,7 +24,7 @@ import java.nio.file.Paths;
 @Mojo(name = "create-migration")
 public class TimachineMojo extends AbstractMojo {
 
-    @Parameter(required = true)
+    @Parameter(property = "project.build.sourceDirectory")
     private String sourceDir;
 
     @Parameter(required = true)

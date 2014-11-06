@@ -14,7 +14,7 @@ public class MigrationNameResolver {
         if (name == null) {
             name = "";
         }
-        if (!name.matches("[A-Z]\\w*]")) {
+        if (!name.matches("([A-Z]\\w*])?")) {
             throw new RuntimeException("Name should start with up case letter, with letters and digits following.");
         }
         String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
