@@ -1,9 +1,7 @@
 package jp.co.worksap.timachine;
 
 import jp.co.worksap.timachine.model.Options;
-import jp.co.worksap.timachine.model.Revocable;
 import jp.co.worksap.timachine.model.VersionDifference;
-import jp.co.worksap.timachine.spi.Migration;
 import jp.co.worksap.timachine.spi.TransactionManager;
 import jp.co.worksap.timachine.spi.VersionProvider;
 
@@ -22,7 +20,7 @@ public class Executor {
         this.versionProvider = versionProvider;
     }
 
-    public void execute(Options options, List<Class<? extends Migration>> migrationClasses) throws Exception {
+    public void execute(Options options, List<Class<?>> migrationClasses) throws Exception {
         Migrations migrations = new Migrations(migrationClasses);
         VersionChecker versionChecker = new VersionChecker(versionProvider, migrations);
         VersionDifference versionDifference = versionChecker.versionDifference(options.getFromVersion(), options.getToVersion());
@@ -34,13 +32,13 @@ public class Executor {
     }
 
     private void migrate(VersionDifference versionDifference, Migrations migrations) throws Exception {
-        List<Class<? extends Migration>> targetMigrations = new ArrayList<>();
+        List<MigrationMetaData> targetMigrations = new ArrayList<>();
 
         boolean revocable = true;
         for (String version : versionDifference.getVersions()) {
-            Class<? extends Migration> clazz = migrations.migration(version);
-            targetMigrations.add(clazz);
-            if (!clazz.isAnnotationPresent(Revocable.class)) {
+            MigrationMetaData metaData = migrations.migration(version);
+            targetMigrations.add(metaData);
+            if (!metaData.isRevocable()) {
                 revocable = false;
             }
         }
@@ -53,19 +51,19 @@ public class Executor {
         apply(versionDifference, targetMigrations);
     }
 
-    private void apply(VersionDifference versionDifference, List<Class<? extends Migration>> migrations) throws Exception {
+    private void apply(VersionDifference versionDifference, List<MigrationMetaData> migrations) throws Exception {
         transactionManager.begin();
         try {
             if (!versionDifference.isBehind()) {
-                for (Class<? extends Migration> clazz : migrations) {
-                    Migration migration = clazz.newInstance();
-                    migration.up();
+                for (MigrationMetaData metaData : migrations) {
+                    Object obj = metaData.getClazz().newInstance();
+                    metaData.getUp().invoke(obj);
                 }
             } else {
                 for (int i = migrations.size() - 1; i >= 0; i--) {
-                    Class<? extends Migration> clazz = migrations.get(i);
-                    Migration migration = clazz.newInstance();
-                    migration.down();
+                    MigrationMetaData metaData = migrations.get(i);
+                    Object obj = metaData.getClazz().newInstance();
+                    metaData.getDown().invoke(obj);
                 }
             }
             transactionManager.commit();

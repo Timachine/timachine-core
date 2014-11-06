@@ -1,19 +1,20 @@
 package jp.co.worksap.timachine.migrations;
 
-import jp.co.worksap.timachine.model.Revocable;
-import jp.co.worksap.timachine.spi.Migration;
+import jp.co.worksap.timachine.model.Down;
+import jp.co.worksap.timachine.model.Migration;
+import jp.co.worksap.timachine.model.Up;
 
 /**
  * Created by liuyang on 14-10-8.
  */
-@Revocable
-public class M4 implements Migration {
-    @Override
+@Migration
+public class M20141106171533WithSomeName {
+    @Up
     public void up() {
         System.out.println("up 4");
     }
 
-    @Override
+    @Down
     public void down() {
         System.out.println("down 4");
 
