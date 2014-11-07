@@ -29,7 +29,7 @@ public class Executor {
         VersionChecker versionChecker = new VersionChecker(versionProvider, migrations);
         VersionDifference versionDifference = versionChecker.versionDifference(options.getFromVersion(), options.getToVersion());
         if (versionDifference.getVersions().isEmpty()) {
-            System.out.println("Nothing to migrate");
+            LOGGER.info("Nothing to migrate, version already up-to-date.");
             return;
         }
         migrate(versionDifference, migrations);
@@ -47,7 +47,7 @@ public class Executor {
             }
         }
         if (!versionDifference.isBehind() && !revocable) {
-            System.out.println("This operation is not revocable since there is irrevocable migration!!!");
+            LOGGER.warn("This operation is not revocable since there is irrevocable migration!!!");
         }
         if (versionDifference.isBehind() && !revocable) {
             throw new IllegalArgumentException("Can not migrate backwards since there is irrevocable migration.");
@@ -75,6 +75,7 @@ public class Executor {
                 }
             }
             versionProvider.updateVersion(versionDifference.getTargetVersion());
+            LOGGER.info("Version updated to: " + versionDifference.getTargetVersion());
             transactionManager.commit();
         } catch (Exception e) {
             transactionManager.rollback();

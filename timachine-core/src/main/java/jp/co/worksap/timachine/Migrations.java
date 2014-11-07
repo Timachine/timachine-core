@@ -35,7 +35,7 @@ public class Migrations {
         }
         Collections.sort(versions);
         for (String version : versions) {
-            LOGGER.info("Preparing to execute migration: " + migrationsMap.get(version).getClazz().getSimpleName());
+            LOGGER.info("Detected migration: " + migrationsMap.get(version).getClazz().getSimpleName());
         }
     }
 
