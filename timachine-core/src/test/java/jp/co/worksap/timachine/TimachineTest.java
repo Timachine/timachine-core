@@ -88,7 +88,7 @@ public class TimachineTest {
         Executor executor = new Executor(transactionManager, versionProvider);
         Options options = new Options();
         executor.execute(options, migrations);
-        assertEquals("This operation is not revocable since there is irrevocable migration!!!\nup 2\nup 3\nup 4\nup 5\n", log.getLog());
+        assertEquals("up 2\nup 3\nup 4\nup 5\n", log.getLog());
     }
 
     @Test
