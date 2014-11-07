@@ -13,4 +13,5 @@ import java.util.List;
 public class VersionDifference {
     private boolean behind = false;
     private List<String> versions;
+    private String targetVersion;
 }

@@ -20,6 +20,7 @@ public class VersionChecker {
     }
 
     public VersionDifference versionDifference(String from, String to) {
+        VersionDifference versionDifference = new VersionDifference();
         List<String> allVersions = migrations.getVersions();
         if (from == null) {
             from = versionProvider.currentVersion();
@@ -27,13 +28,13 @@ public class VersionChecker {
         if (to == null) {
             to = allVersions.get(allVersions.size() - 1);
         }
+        versionDifference.setTargetVersion(to);
         if (from != null && !contains(from)) {
             throw new IllegalArgumentException("Can not find 'from' version " + from);
         }
         if (!contains(to)) {
             throw new IllegalArgumentException("Can not find 'to' version " + to);
         }
-        VersionDifference versionDifference = new VersionDifference();
         int fromIndex;
         if (from == null) {
             fromIndex = -1;

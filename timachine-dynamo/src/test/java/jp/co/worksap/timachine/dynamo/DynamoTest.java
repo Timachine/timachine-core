@@ -46,13 +46,7 @@ public class DynamoTest {
 
     @Test
     public void testDynamoMigration() throws Exception {
-        Executor exe = new Executor(new TransactionManagerDynamo(), new VersionProvider() {
-
-            @Override
-            public String currentVersion() {
-                return null;
-            }
-        });
+        Executor exe = new DynamoExecutor();
         exe.execute(opt, migrations);
     }
 

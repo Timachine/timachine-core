@@ -22,9 +22,9 @@ import java.nio.file.Paths;
  * Created by liuyang on 14-11-6.
  */
 @Mojo(name = "create-migration")
-public class TimachineMojo extends AbstractMojo {
+public class CreateMigrationMojo extends AbstractMojo {
 
-    @Parameter(required = true)
+    @Parameter(property = "project.build.sourceDirectory")
     private String sourceDir;
 
     @Parameter(required = true)
@@ -40,7 +40,7 @@ public class TimachineMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_21);
-        cfg.setClassForTemplateLoading(TimachineMojo.class, "templates");
+        cfg.setClassForTemplateLoading(CreateMigrationMojo.class, "templates");
         cfg.setDefaultEncoding("UTF-8");
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.DEBUG_HANDLER);
         try {
