@@ -12,6 +12,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -27,12 +28,22 @@ import java.nio.file.Paths;
 @Mojo(name = "create-migration")
 public class CreateMigrationMojo extends AbstractMojo {
 
-    @Parameter(property = "project.build.sourceDirectory")
+    @Parameter(defaultValue = "${project.build.sourceDirectory}", readonly = true)
     private String sourceDir;
+
+    @Parameter(required = true, readonly = true)
+    @Getter
+    private String packageName;
+
+    @Parameter(defaultValue = "${project.build.testSourceDirectory}", readonly = true)
+    private String testDir;
+
+    @Parameter(defaultValue = "${project.basedir}", readonly = true)
+    private File baseDir;
 
     @Parameter(required = true)
     @Getter
-    private String packageName;
+    private String testPackageName;
 
     @Parameter(defaultValue = "migration")
     private String templateName;
@@ -51,14 +62,29 @@ public class CreateMigrationMojo extends AbstractMojo {
             String name = System.getProperty("name");
             String type = System.getProperty("type");
             if (type == null) {
-                type = "MAIN";
+                type = MigrationType.MAIN.name();
+            }
+            MigrationType migrationType = MigrationType.valueOf(type);
+            String dir;
+            String pkg;
+            switch (migrationType) {
+                case MAIN:
+                    dir = sourceDir;
+                    pkg = packageName;
+                    break;
+                case TEST:
+                    dir = testDir;
+                    pkg = testPackageName;
+                    break;
+                default:
+                    throw new MojoExecutionException("Unexpected type");
             }
             this.className = MigrationNameResolver.generateClassName(name, MigrationType.valueOf(type));
-            String[] splitted = packageName.split("[.]");
-            Path path = Paths.get(sourceDir, splitted).resolve(this.className + ".java");
+            String[] splitted = pkg.split("[.]");
+            Path path = Paths.get(dir, splitted).resolve(this.className + ".java");
             BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
             template.process(this, writer);
-            getLog().info("Migration file generated in " + Paths.get(sourceDir).relativize(path));
+            getLog().info("Migration file generated in " + Paths.get(baseDir.toURI()).relativize(path));
         } catch (IOException | TemplateException e) {
             throw new MojoExecutionException("Failed to process template", e);
         }
