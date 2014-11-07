@@ -64,6 +64,11 @@ public class TimachineTest {
         public String currentVersion() {
             return currentVersion;
         }
+
+        @Override
+        public void updateVersion(String newVersion) {
+
+        }
     }
 
     private FakeVersionProvider versionProvider = new FakeVersionProvider();

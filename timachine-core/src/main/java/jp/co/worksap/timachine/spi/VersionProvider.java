@@ -5,4 +5,6 @@ package jp.co.worksap.timachine.spi;
  */
 public interface VersionProvider {
     String currentVersion();
+
+    void updateVersion(String newVersion);
 }

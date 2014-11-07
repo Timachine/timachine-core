@@ -74,6 +74,7 @@ public class Executor {
                     LOGGER.info("Success!");
                 }
             }
+            versionProvider.updateVersion(versionDifference.getTargetVersion());
             transactionManager.commit();
         } catch (Exception e) {
             transactionManager.rollback();
