@@ -55,11 +55,9 @@ public class CreateMigrationMojo extends AbstractMojo {
             Path path = Paths.get(sourceDir, splitted).resolve(this.className + ".java");
             BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
             template.process(this, writer);
+            getLog().info("Migration file generated in " + Paths.get(sourceDir).relativize(path));
         } catch (IOException | TemplateException e) {
             throw new MojoExecutionException("Failed to process template", e);
         }
-
-        getLog().info(sourceDir);
-        getLog().info(packageName);
     }
 }

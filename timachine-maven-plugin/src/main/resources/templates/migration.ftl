@@ -1,14 +1,17 @@
 package ${packageName};
 
-import jp.co.worksap.timachine.spi.Migration;
+import jp.co.worksap.timachine.model.Down;
+import jp.co.worksap.timachine.model.Migration;
+import jp.co.worksap.timachine.model.Up;
 
-public class ${className} implements Migration {
-    @Override
+@Migration
+public class ${className}{
+    @Up
     public void up(){
 
     }
 
-    @Override
+    @Down
     public void down(){
 
     }
