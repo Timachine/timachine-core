@@ -19,7 +19,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * Created by liuyang on 14-11-6.
+ * Create a migration.
+ * <p>Parameters:  use -D to specify</p>
+ * <p>name : name appended to the generated class name</p>
+ * <p>type : type of this migration, (MAIN, TEST) as options</p>
  */
 @Mojo(name = "create-migration")
 public class CreateMigrationMojo extends AbstractMojo {

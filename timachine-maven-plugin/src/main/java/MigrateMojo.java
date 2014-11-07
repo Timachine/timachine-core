@@ -13,7 +13,7 @@ import java.net.URLClassLoader;
 import java.util.*;
 
 /**
- * Created by liuyang on 14-11-7.
+ * Run migration.
  */
 @Mojo(name = "migrate", requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
 @Execute(phase = LifecyclePhase.COMPILE)
