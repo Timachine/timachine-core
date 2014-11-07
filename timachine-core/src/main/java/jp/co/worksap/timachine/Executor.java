@@ -4,6 +4,8 @@ import jp.co.worksap.timachine.model.Options;
 import jp.co.worksap.timachine.model.VersionDifference;
 import jp.co.worksap.timachine.spi.TransactionManager;
 import jp.co.worksap.timachine.spi.VersionProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,8 @@ import java.util.List;
  * Created by liuyang on 14-10-8.
  */
 public class Executor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Executor.class);
+
     private TransactionManager transactionManager;
     private VersionProvider versionProvider;
 
@@ -57,13 +61,17 @@ public class Executor {
             if (!versionDifference.isBehind()) {
                 for (MigrationMetaData metaData : migrations) {
                     Object obj = metaData.getClazz().newInstance();
+                    LOGGER.info("Migrating " + metaData.getClazz().getSimpleName() + " using up method " + metaData.getUp().getName());
                     metaData.getUp().invoke(obj);
+                    LOGGER.info("Success!");
                 }
             } else {
                 for (int i = migrations.size() - 1; i >= 0; i--) {
                     MigrationMetaData metaData = migrations.get(i);
                     Object obj = metaData.getClazz().newInstance();
+                    LOGGER.info("Migrating " + metaData.getClazz().getSimpleName() + " using down method " + metaData.getDown().getName());
                     metaData.getDown().invoke(obj);
+                    LOGGER.info("Success!");
                 }
             }
             transactionManager.commit();

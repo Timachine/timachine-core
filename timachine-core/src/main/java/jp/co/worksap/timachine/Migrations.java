@@ -4,17 +4,18 @@ import jp.co.worksap.timachine.model.Down;
 import jp.co.worksap.timachine.model.Migration;
 import jp.co.worksap.timachine.model.Up;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by liuyang on 14-10-10.
  */
 public class Migrations {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Migrations.class);
 
     @Getter
     private final List<String> versions;
@@ -31,6 +32,10 @@ public class Migrations {
             }
             versions.add(metaData.getVersion());
             migrationsMap.put(metaData.getVersion(), metaData);
+        }
+        Collections.sort(versions);
+        for (String version : versions) {
+            LOGGER.info("Preparing to execute migration: " + migrationsMap.get(version).getClazz().getSimpleName());
         }
     }
 
