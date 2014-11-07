@@ -51,6 +51,12 @@ public class CreateMigrationMojo extends AbstractMojo {
     @Getter
     private String className = "";
 
+    @Parameter(property = "name", defaultValue = "")
+    private String name;
+
+    @Parameter(property = "type", defaultValue = "MAIN")
+    private String type;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_21);
@@ -59,11 +65,6 @@ public class CreateMigrationMojo extends AbstractMojo {
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.DEBUG_HANDLER);
         try {
             Template template = cfg.getTemplate(templateName + ".ftl");
-            String name = System.getProperty("name");
-            String type = System.getProperty("type");
-            if (type == null) {
-                type = MigrationType.MAIN.name();
-            }
             MigrationType migrationType = MigrationType.valueOf(type);
             String dir;
             String pkg;

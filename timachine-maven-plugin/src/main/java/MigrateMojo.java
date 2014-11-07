@@ -19,7 +19,6 @@ import java.util.*;
 @Execute(phase = LifecyclePhase.COMPILE)
 public class MigrateMojo extends AbstractMojo {
 
-
     @Parameter(required = true)
     private String packageName;
     @Parameter(property = "project.runtimeClasspathElements")
@@ -30,7 +29,6 @@ public class MigrateMojo extends AbstractMojo {
 
     @Parameter(required = true)
     private String executor;
-
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
