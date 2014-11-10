@@ -30,6 +30,12 @@ public class MigrateMojo extends AbstractMojo {
     @Parameter(required = true)
     private String executor;
 
+    @Parameter(property = "to")
+    private String to;
+
+    @Parameter(property = "from")
+    private String from;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
 
@@ -46,6 +52,8 @@ public class MigrateMojo extends AbstractMojo {
         try {
             Executor executorImpl = (Executor) Thread.currentThread().getContextClassLoader().loadClass(executor).newInstance();
             Options options = new Options();
+            options.setFromVersion(from);
+            options.setToVersion(to);
             executorImpl.execute(options, list);
         } catch (Exception e) {
             throw new MojoExecutionException("Failed to initialize dependencies.", e);

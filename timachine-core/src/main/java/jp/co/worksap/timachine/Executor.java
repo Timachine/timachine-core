@@ -4,6 +4,7 @@ import jp.co.worksap.timachine.model.Options;
 import jp.co.worksap.timachine.model.VersionDifference;
 import jp.co.worksap.timachine.spi.TransactionManager;
 import jp.co.worksap.timachine.spi.VersionProvider;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +18,7 @@ public class Executor {
     private static final Logger LOGGER = LoggerFactory.getLogger(Executor.class);
 
     private TransactionManager transactionManager;
+    @Getter
     private VersionProvider versionProvider;
 
     public Executor(TransactionManager transactionManager, VersionProvider versionProvider) {
