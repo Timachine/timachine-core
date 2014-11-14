@@ -5,7 +5,10 @@ package jp.co.worksap.timachine.spi;
  */
 public interface TransactionManager {
     void begin();
+
     void commit();
+
     void rollback();
-	void close();
+
+    void close();
 }

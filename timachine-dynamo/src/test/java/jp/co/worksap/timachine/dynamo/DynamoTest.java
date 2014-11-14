@@ -5,7 +5,6 @@ import jp.co.worksap.timachine.Executor;
 import jp.co.worksap.timachine.dynamo.migrations.M20141106173530;
 import jp.co.worksap.timachine.dynamo.migrations.M20141107173530;
 import jp.co.worksap.timachine.model.Options;
-import jp.co.worksap.timachine.spi.VersionProvider;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
