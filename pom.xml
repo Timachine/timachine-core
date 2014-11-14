@@ -15,6 +15,20 @@
     <name>timachine-parent</name>
     <url>http://maven.apache.org</url>
 
+    <repositories>
+        <repository>
+            <id>ate-releases</id>
+            <name>ATE Releases</name>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+            <url>http://192.168.140.17/nexus/content/repositories/releases</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
