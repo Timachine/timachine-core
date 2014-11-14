@@ -42,7 +42,6 @@
     </build>
     <modules>
         <module>timachine-core</module>
-        <module>timachine-dynamo</module>
         <module>timachine-maven-plugin</module>
     </modules>
 </project>
