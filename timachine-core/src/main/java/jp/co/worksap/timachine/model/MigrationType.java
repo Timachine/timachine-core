@@ -1,4 +1,4 @@
-package jp.co.worksap.timachine;
+package jp.co.worksap.timachine.model;
 
 
 /**

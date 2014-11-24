@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class VersionChecker {
 
+    public static final String INIT_VERSION = "INIT";
     private final VersionProvider versionProvider;
     private final Migrations migrations;
 
@@ -19,29 +20,30 @@ public class VersionChecker {
         this.migrations = migrations;
     }
 
-    public VersionDifference versionDifference(String from, String to) {
+    public VersionDifference versionDifference(String to) {
         VersionDifference versionDifference = new VersionDifference();
         List<String> allVersions = migrations.getVersions();
-        if (from == null) {
-            from = versionProvider.currentVersion();
-        }
+
         if (to == null) {
             to = allVersions.get(allVersions.size() - 1);
         }
         versionDifference.setTargetVersion(to);
-        if (from != null && !contains(from)) {
-            throw new IllegalArgumentException("Can not find 'from' version " + from);
-        }
-        if (!contains(to)) {
+
+        if (!contains(to) && !to.equals(INIT_VERSION)) {
             throw new IllegalArgumentException("Can not find 'to' version " + to);
         }
-        int fromIndex;
-        if (from == null) {
+        int fromIndex, toIndex;
+        String currentVersion = versionProvider.currentVersion();
+        if (currentVersion == null) {
             fromIndex = -1;
         } else {
-            fromIndex = allVersions.indexOf(from);
+            fromIndex = allVersions.indexOf(currentVersion);
         }
-        int toIndex = allVersions.indexOf(to);
+        if (to.equals(INIT_VERSION)) {
+            toIndex = -1;
+        } else {
+            toIndex = allVersions.indexOf(to);
+        }
         if (fromIndex < toIndex) {
             versionDifference.setVersions(allVersions.subList(fromIndex + 1, toIndex + 1));
         } else {
@@ -49,14 +51,6 @@ public class VersionChecker {
             versionDifference.setVersions(allVersions.subList(toIndex + 1, fromIndex + 1));
         }
         return versionDifference;
-    }
-
-    public VersionDifference diffUtil(String to) {
-        return versionDifference(null, to);
-    }
-
-    public VersionDifference diffUtilNow() {
-        return versionDifference(null, null);
     }
 
     public boolean contains(String version) {

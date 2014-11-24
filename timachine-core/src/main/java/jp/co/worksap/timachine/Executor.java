@@ -1,5 +1,6 @@
 package jp.co.worksap.timachine;
 
+import jp.co.worksap.timachine.model.MigrationMetaData;
 import jp.co.worksap.timachine.model.Options;
 import jp.co.worksap.timachine.model.VersionDifference;
 import jp.co.worksap.timachine.spi.TransactionManager;
@@ -29,7 +30,7 @@ public class Executor {
     public void execute(Options options, List<Class<?>> migrationClasses) throws Exception {
         Migrations migrations = new Migrations(migrationClasses);
         VersionChecker versionChecker = new VersionChecker(versionProvider, migrations);
-        VersionDifference versionDifference = versionChecker.versionDifference(options.getFromVersion(), options.getToVersion());
+        VersionDifference versionDifference = versionChecker.versionDifference(options.getToVersion());
         if (versionDifference.getVersions().isEmpty()) {
             LOGGER.info("Nothing to migrate, version already up-to-date.");
             return;

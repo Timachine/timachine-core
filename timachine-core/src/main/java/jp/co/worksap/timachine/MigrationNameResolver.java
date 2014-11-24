@@ -1,5 +1,7 @@
 package jp.co.worksap.timachine;
 
+import jp.co.worksap.timachine.model.MigrationType;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

@@ -3,7 +3,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import jp.co.worksap.timachine.MigrationNameResolver;
-import jp.co.worksap.timachine.MigrationType;
+import jp.co.worksap.timachine.model.MigrationType;
 import lombok.Getter;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;

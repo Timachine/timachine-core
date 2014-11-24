@@ -1,5 +1,6 @@
 import jp.co.worksap.timachine.Executor;
 import jp.co.worksap.timachine.Migrations;
+import jp.co.worksap.timachine.VersionChecker;
 import jp.co.worksap.timachine.model.Migration;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -32,12 +33,6 @@ public class StatusMojo extends AbstractMojo {
     @Parameter(required = true)
     private String executor;
 
-    @Parameter(property = "to")
-    private String to;
-
-    @Parameter(property = "from")
-    private String from;
-
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -58,15 +53,14 @@ public class StatusMojo extends AbstractMojo {
             String currentVersion = executorImpl.getVersionProvider().currentVersion();
             String versionStr;
             if (currentVersion == null) {
-                versionStr = "INIT (empty, no migration executed)";
-            } else {
-                versionStr = currentVersion;
+                currentVersion = VersionChecker.INIT_VERSION;
             }
+            versionStr = currentVersion;
             ps.print(String.format("Current version: %s", versionStr));
             if (!migrations.getVersions().isEmpty()) {
                 String status;
                 String latestVersion = migrations.getVersions().get(migrations.getVersions().size() - 1);
-                if (currentVersion == null) {
+                if (VersionChecker.INIT_VERSION.equals(currentVersion)) {
                     int behind = migrations.getVersions().size();
                     status = String.format("behind %d steps", behind);
                 } else if (!migrations.getVersions().contains(currentVersion)) {

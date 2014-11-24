@@ -14,6 +14,8 @@ import java.util.*;
 
 /**
  * Run migration.
+ * <p>Parameters:  use -D to specify</p>
+ * <p>to : to version of migration (INIT as the first version)</p>
  */
 @Mojo(name = "migrate", requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
 @Execute(phase = LifecyclePhase.COMPILE)
@@ -33,9 +35,6 @@ public class MigrateMojo extends AbstractMojo {
     @Parameter(property = "to")
     private String to;
 
-    @Parameter(property = "from")
-    private String from;
-
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
 
@@ -52,7 +51,6 @@ public class MigrateMojo extends AbstractMojo {
         try {
             Executor executorImpl = (Executor) Thread.currentThread().getContextClassLoader().loadClass(executor).newInstance();
             Options options = new Options();
-            options.setFromVersion(from);
             options.setToVersion(to);
             executorImpl.execute(options, list);
         } catch (Exception e) {

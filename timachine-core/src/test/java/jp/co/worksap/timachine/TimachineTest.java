@@ -28,7 +28,6 @@ public class TimachineTest {
         migrations.add(M20141106171531.class);
         migrations.add(M20141106171532.class);
         migrations.add(M20141106171533WithSomeName.class);
-        migrations.add(M20141106171534.class);
     }
 
     @Rule
@@ -67,7 +66,7 @@ public class TimachineTest {
 
         @Override
         public void updateVersion(String newVersion) {
-
+            currentVersion = newVersion;
         }
     }
 
@@ -79,34 +78,51 @@ public class TimachineTest {
         Executor executor = new Executor(transactionManager, versionProvider);
         Options options = new Options();
         executor.execute(options, migrations);
-        assertEquals("up 3\nup 4\nup 5\n", log.getLog());
+        assertEquals("up 3\nup 4\n", log.getLog());
+    }
+
+    @Test
+    public void testUpFromInit() throws Exception {
+        versionProvider.setCurrentVersion("INIT");
+        Executor executor = new Executor(transactionManager, versionProvider);
+        Options options = new Options();
+        executor.execute(options, migrations);
+        assertEquals("up 1\nup 2\nup 3\nup 4\n", log.getLog());
     }
 
     @Test
     public void testUpIrrevocable() throws Exception {
-        versionProvider.setCurrentVersion("M20141106171530");
-        Executor executor = new Executor(transactionManager, versionProvider);
-        Options options = new Options();
-        executor.execute(options, migrations);
-        assertEquals("up 2\nup 3\nup 4\nup 5\n", log.getLog());
+        migrations.add(M20141106171534.class);
+        try {
+            Executor executor = new Executor(transactionManager, versionProvider);
+            Options options = new Options();
+            try {
+                executor.execute(options, migrations);
+            } catch (RuntimeException e) {
+                assertEquals("Class does not contain a method annotated with \"@Down\"jp.co.worksap.timachine.migrations.M20141106171534", e.getMessage());
+            }
+        } finally {
+            migrations.remove(M20141106171534.class);
+        }
     }
 
     @Test
     public void testDown() throws Exception {
-        versionProvider.setCurrentVersion("M20141106171534");
+        versionProvider.setCurrentVersion("M20141106171533");
         Executor executor = new Executor(transactionManager, versionProvider);
         Options options = new Options();
         options.setToVersion("M20141106171531");
         executor.execute(options, migrations);
-        assertEquals("down 5\ndown 4\ndown 3\n", log.getLog());
+        assertEquals("down 4\ndown 3\n", log.getLog());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testDownIrrevocable() throws Exception {
-        versionProvider.setCurrentVersion("M20141106171534");
+    @Test
+    public void testDownToInit() throws Exception {
+        versionProvider.setCurrentVersion("M20141106171533");
         Executor executor = new Executor(transactionManager, versionProvider);
         Options options = new Options();
-        options.setToVersion("M20141106171530");
+        options.setToVersion("INIT");
         executor.execute(options, migrations);
+        assertEquals("down 4\ndown 3\ndown 2\ndown 1\n", log.getLog());
     }
 }

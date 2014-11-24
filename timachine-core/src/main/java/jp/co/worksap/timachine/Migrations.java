@@ -2,6 +2,7 @@ package jp.co.worksap.timachine;
 
 import jp.co.worksap.timachine.model.Down;
 import jp.co.worksap.timachine.model.Migration;
+import jp.co.worksap.timachine.model.MigrationMetaData;
 import jp.co.worksap.timachine.model.Up;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -65,13 +66,14 @@ public class Migrations {
         if (upMethods.size() > 1) {
             throw new RuntimeException("Class contains multiple methods annotated with \"@Up\"" + migration.getName());
         }
+        if (downMethods.size() == 0) {
+            throw new RuntimeException("Class does not contain a method annotated with \"@Down\"" + migration.getName());
+        }
         if (downMethods.size() > 1) {
             throw new RuntimeException("Class contains multiple methods annotated with \"@Down\"" + migration.getName());
         }
         metaData.setUp(upMethods.get(0));
-        if (downMethods.size() == 1) {
-            metaData.setDown(downMethods.get(0));
-        }
+        metaData.setDown(downMethods.get(0));
         return metaData;
     }
 
