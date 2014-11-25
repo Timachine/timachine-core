@@ -7,13 +7,13 @@ import jp.co.worksap.timachine.model.Up;
 
 @Migration
 public class ${className} extends DynamoMigration {
-@Up
-public void up() {
+    @Up
+    public void up() {
 
-}
+    }
 
-@Down
-public void down() {
+    @Down
+    public void down() {
 
-}
+    }
 }
