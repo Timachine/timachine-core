@@ -66,7 +66,7 @@ public class StatusMojo extends AbstractMojo {
                 } else if (!migrations.getVersions().contains(currentVersion)) {
                     status = "ERROR! Not tracked in migrations";
                 } else if (currentVersion.equals(latestVersion)) {
-                    status = "up to dade";
+                    status = "up to date";
                 } else {
                     int behind = migrations.getVersions().size() - 1 - migrations.getVersions().indexOf(currentVersion);
                     status = String.format("behind %d steps", behind);
