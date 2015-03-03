@@ -54,6 +54,7 @@ public class VersionChecker {
         }
         String latestExecutedVersion = null;
         if (currentVersions.isEmpty()) {
+            latestExecutedVersion = INIT_VERSION;
             latestExecutedIndex = -1;
         } else {
             latestExecutedVersion = currentVersions.get(currentVersions.size() - 1);
