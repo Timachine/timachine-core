@@ -4,6 +4,7 @@ package jp.co.worksap.timachine;
 import jp.co.worksap.timachine.model.VersionDifference;
 import jp.co.worksap.timachine.spi.VersionProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,35 +21,63 @@ public class VersionChecker {
         this.migrations = migrations;
     }
 
-    public VersionDifference versionDifference(String to) {
-        VersionDifference versionDifference = new VersionDifference();
+    private String checkToVersion(String to) {
         List<String> allVersions = migrations.getVersions();
 
         if (to == null) {
             to = allVersions.get(allVersions.size() - 1);
         }
-        versionDifference.setTargetVersion(to);
-
         if (!contains(to) && !to.equals(INIT_VERSION)) {
             throw new IllegalArgumentException("Can not find 'to' version " + to);
         }
-        int fromIndex, toIndex;
-        String currentVersion = versionProvider.currentVersion();
-        if (currentVersion == null) {
-            fromIndex = -1;
-        } else {
-            fromIndex = allVersions.indexOf(currentVersion);
-        }
+        return to;
+    }
+
+    private int checkToIndex(String to) {
         if (to.equals(INIT_VERSION)) {
-            toIndex = -1;
+            return -1;
         } else {
-            toIndex = allVersions.indexOf(to);
+            return migrations.getVersions().indexOf(to);
         }
-        if (fromIndex < toIndex) {
-            versionDifference.setVersions(allVersions.subList(fromIndex + 1, toIndex + 1));
+    }
+
+    public VersionDifference versionDifference(String to) {
+        List<String> allVersions = migrations.getVersions();
+        VersionDifference versionDifference = new VersionDifference();
+        to = checkToVersion(to);
+        versionDifference.setTargetVersion(to);
+
+        int latestExecutedIndex;
+        List<String> currentVersions = versionProvider.executedVersions();
+        if (currentVersions == null) {
+            currentVersions = new ArrayList<>();
+        }
+        String latestExecutedVersion = null;
+        if (currentVersions.isEmpty()) {
+            latestExecutedIndex = -1;
         } else {
+            latestExecutedVersion = currentVersions.get(currentVersions.size() - 1);
+            latestExecutedIndex = allVersions.indexOf(latestExecutedVersion);
+        }
+        versionDifference.setLatestExecutedVersion(latestExecutedVersion);
+        int toIndex = checkToIndex(to);
+
+        versionDifference.setVersionsAfterExecuted(allVersions.subList(0, toIndex + 1));
+        //fulfill missed versions before the target
+        for (int i = 0; i <= toIndex; i++) {
+            String version = allVersions.get(i);
+            if (!currentVersions.contains(version)) {
+                versionDifference.addStep(version, true);
+            }
+        }
+        if (latestExecutedIndex > toIndex) { // down method
+            for (int i = latestExecutedIndex; i > toIndex; i--) {
+                String version = allVersions.get(i);
+                if (currentVersions.contains(version)) {
+                    versionDifference.addStep(version, false);
+                }
+            }
             versionDifference.setBehind(true);
-            versionDifference.setVersions(allVersions.subList(toIndex + 1, fromIndex + 1));
         }
         return versionDifference;
     }

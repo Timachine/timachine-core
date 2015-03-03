@@ -9,7 +9,6 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,7 +30,7 @@ public class Executor {
         Migrations migrations = new Migrations(migrationClasses);
         VersionChecker versionChecker = new VersionChecker(versionProvider, migrations);
         VersionDifference versionDifference = versionChecker.versionDifference(options.getToVersion());
-        if (versionDifference.getVersions().isEmpty()) {
+        if (versionDifference.getSteps().isEmpty()) {
             LOGGER.info("Nothing to migrate, version already up-to-date.");
             return;
         }
@@ -39,45 +38,43 @@ public class Executor {
     }
 
     private void migrate(VersionDifference versionDifference, Migrations migrations) throws Exception {
-        List<MigrationMetaData> targetMigrations = new ArrayList<>();
 
         boolean revocable = true;
-        for (String version : versionDifference.getVersions()) {
-            MigrationMetaData metaData = migrations.migration(version);
-            targetMigrations.add(metaData);
-            if (!metaData.isRevocable()) {
+        boolean executable = true;
+        for (VersionDifference.Step step : versionDifference.getSteps()) {
+            MigrationMetaData metaData = migrations.migration(step.getVersion());
+            if (!metaData.isRevocable() && step.isUp()) {
                 revocable = false;
             }
+            if (!metaData.isRevocable() && !step.isUp()) {
+                executable = false;
+            }
         }
-        if (!versionDifference.isBehind() && !revocable) {
+        if (!revocable) {
             LOGGER.warn("This operation is not revocable since there is irrevocable migration!!!");
         }
-        if (versionDifference.isBehind() && !revocable) {
+        if (!executable) {
             throw new IllegalArgumentException("Can not migrate backwards since there is irrevocable migration.");
         }
-        apply(versionDifference, targetMigrations);
+        apply(versionDifference, migrations);
     }
 
-    private void apply(VersionDifference versionDifference, List<MigrationMetaData> migrations) throws Exception {
+    private void apply(VersionDifference versionDifference, Migrations migrations) throws Exception {
         transactionManager.begin();
         try {
-            if (!versionDifference.isBehind()) {
-                for (MigrationMetaData metaData : migrations) {
-                    Object obj = metaData.getClazz().newInstance();
+            for (VersionDifference.Step step : versionDifference.getSteps()) {
+                MigrationMetaData metaData = migrations.migration(step.getVersion());
+                Object obj = metaData.getClazz().newInstance();
+                if (step.isUp()) {
                     LOGGER.info("Migrating " + metaData.getClazz().getSimpleName() + " using up method " + metaData.getUp().getName());
                     metaData.getUp().invoke(obj);
-                    LOGGER.info("Success!");
-                }
-            } else {
-                for (int i = migrations.size() - 1; i >= 0; i--) {
-                    MigrationMetaData metaData = migrations.get(i);
-                    Object obj = metaData.getClazz().newInstance();
+                } else {
                     LOGGER.info("Migrating " + metaData.getClazz().getSimpleName() + " using down method " + metaData.getDown().getName());
                     metaData.getDown().invoke(obj);
-                    LOGGER.info("Success!");
                 }
+                LOGGER.info("Success!");
             }
-            versionProvider.updateVersion(versionDifference.getTargetVersion());
+            versionProvider.updateVersion(versionDifference.getVersionsAfterExecuted());
             LOGGER.info("Version updated to: " + versionDifference.getTargetVersion());
             transactionManager.commit();
         } catch (Exception e) {

@@ -1,7 +1,9 @@
 package jp.co.worksap.timachine.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,7 +13,22 @@ import java.util.List;
 
 @Data
 public class VersionDifference {
-    private boolean behind = false;
-    private List<String> versions;
+    @Data
+    @AllArgsConstructor
+    public static class Step {
+        private String version;
+        private boolean up;
+    }
+
+    private List<Step> steps = new ArrayList<>();
+    private List<String> versionsAfterExecuted;
+    private String latestExecutedVersion;
     private String targetVersion;
+
+    private boolean behind = false;
+
+    public void addStep(String version, boolean up) {
+        steps.add(new Step(version, up));
+    }
+
 }

@@ -1,10 +1,12 @@
 package jp.co.worksap.timachine.spi;
 
+import java.util.List;
+
 /**
  * Created by liuyang on 14-10-8.
  */
 public interface VersionProvider {
-    String currentVersion();
+    List<String> executedVersions();
 
-    void updateVersion(String newVersion);
+    void updateVersion(List<String> executedVersions);
 }
