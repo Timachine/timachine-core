@@ -2,6 +2,8 @@ import jp.co.worksap.timachine.Executor;
 import jp.co.worksap.timachine.Migrations;
 import jp.co.worksap.timachine.VersionChecker;
 import jp.co.worksap.timachine.model.Migration;
+import jp.co.worksap.timachine.model.VersionDifference;
+import jp.co.worksap.timachine.spi.VersionProvider;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -50,26 +52,17 @@ public class StatusMojo extends AbstractMojo {
         }
         try {
             Executor executorImpl = (Executor) Thread.currentThread().getContextClassLoader().loadClass(executor).newInstance();
-            String currentVersion = executorImpl.getVersionProvider().currentVersion();
-            String versionStr;
-            if (currentVersion == null) {
-                currentVersion = VersionChecker.INIT_VERSION;
-            }
-            versionStr = currentVersion;
-            ps.print(String.format("Current version: %s", versionStr));
+            VersionProvider versionProvider = executorImpl.getVersionProvider();
+            VersionChecker versionChecker = new VersionChecker(versionProvider, migrations);
+            VersionDifference versionDifference = versionChecker.versionDifference(null);
+            ps.print(String.format("Current version: %s", versionDifference.getLatestExecutedVersion()));
             if (!migrations.getVersions().isEmpty()) {
                 String status;
                 String latestVersion = migrations.getVersions().get(migrations.getVersions().size() - 1);
-                if (VersionChecker.INIT_VERSION.equals(currentVersion)) {
-                    int behind = migrations.getVersions().size();
-                    status = String.format("behind %d steps", behind);
-                } else if (!migrations.getVersions().contains(currentVersion)) {
-                    status = "ERROR! Not tracked in migrations";
-                } else if (currentVersion.equals(latestVersion)) {
+                if (versionDifference.getSteps().isEmpty()) {
                     status = "up to date";
                 } else {
-                    int behind = migrations.getVersions().size() - 1 - migrations.getVersions().indexOf(currentVersion);
-                    status = String.format("behind %d steps", behind);
+                    status = String.format("behind %d steps", versionDifference.getSteps().size());
                 }
                 ps.println(", " + status);
             }

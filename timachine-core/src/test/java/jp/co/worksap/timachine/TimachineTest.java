@@ -4,12 +4,12 @@ import jp.co.worksap.timachine.migrations.*;
 import jp.co.worksap.timachine.model.Options;
 import jp.co.worksap.timachine.spi.TransactionManager;
 import jp.co.worksap.timachine.spi.VersionProvider;
-import lombok.Setter;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -56,17 +56,16 @@ public class TimachineTest {
 
     private static class FakeVersionProvider implements VersionProvider {
 
-        @Setter
-        private String currentVersion;
+        private List<String> executedVersions;
 
         @Override
-        public String currentVersion() {
-            return currentVersion;
+        public List<String> executedVersions() {
+            return executedVersions;
         }
 
         @Override
-        public void updateVersion(String newVersion) {
-            currentVersion = newVersion;
+        public void updateVersion(List<String> executedVersions) {
+            this.executedVersions = executedVersions;
         }
     }
 
@@ -74,7 +73,7 @@ public class TimachineTest {
 
     @Test
     public void testUp() throws Exception {
-        versionProvider.setCurrentVersion("M20141106171531");
+        versionProvider.updateVersion(Arrays.asList("M20141106171530", "M20141106171531"));
         Executor executor = new Executor(transactionManager, versionProvider);
         Options options = new Options();
         executor.execute(options, migrations);
@@ -82,8 +81,18 @@ public class TimachineTest {
     }
 
     @Test
+    public void testUpWithMissedMigration() throws Exception {
+        versionProvider.updateVersion(Arrays.asList("M20141106171530", "M20141106171532"));
+        Executor executor = new Executor(transactionManager, versionProvider);
+        Options options = new Options();
+        executor.execute(options, migrations);
+        assertEquals("up 2\nup 4\n", log.getLog());
+    }
+
+
+    @Test
     public void testUpFromInit() throws Exception {
-        versionProvider.setCurrentVersion("INIT");
+        versionProvider.updateVersion(new ArrayList<String>());
         Executor executor = new Executor(transactionManager, versionProvider);
         Options options = new Options();
         executor.execute(options, migrations);
@@ -108,7 +117,7 @@ public class TimachineTest {
 
     @Test
     public void testDown() throws Exception {
-        versionProvider.setCurrentVersion("M20141106171533");
+        versionProvider.updateVersion(Arrays.asList("M20141106171530", "M20141106171531", "M20141106171532", "M20141106171533"));
         Executor executor = new Executor(transactionManager, versionProvider);
         Options options = new Options();
         options.setToVersion("M20141106171531");
@@ -117,8 +126,18 @@ public class TimachineTest {
     }
 
     @Test
+    public void testDownWithMissedMigration() throws Exception {
+        versionProvider.updateVersion(Arrays.asList("M20141106171530", "M20141106171531", "M20141106171533"));
+        Executor executor = new Executor(transactionManager, versionProvider);
+        Options options = new Options();
+        options.setToVersion("M20141106171531");
+        executor.execute(options, migrations);
+        assertEquals("down 4\n", log.getLog());
+    }
+
+    @Test
     public void testDownToInit() throws Exception {
-        versionProvider.setCurrentVersion("M20141106171533");
+        versionProvider.updateVersion(Arrays.asList("M20141106171530", "M20141106171531", "M20141106171532", "M20141106171533"));
         Executor executor = new Executor(transactionManager, versionProvider);
         Options options = new Options();
         options.setToVersion("INIT");
