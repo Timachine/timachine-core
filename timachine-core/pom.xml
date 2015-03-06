@@ -3,7 +3,7 @@
     <parent>
         <groupId>jp.co.worksap.timachine</groupId>
         <artifactId>parent</artifactId>
-        <version>1.1</version>
+        <version>1.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>timachine-core</artifactId>
     <packaging>jar</packaging>
