@@ -1,0 +1,22 @@
+<lifecycles>
+    <lifecycle>
+        <id>timachinecycle</id>
+        <phases>
+            <phase>
+                <id>compile</id>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>migrate</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <goals>
+                            <goal>seed</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </phase>
+        </phases>
+    </lifecycle>
+</lifecycles>
