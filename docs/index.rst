@@ -7,7 +7,6 @@ All web applications generally face data migration problems during version upgra
 
 Basically, Timachine borrows the concept of `Ruby on Rails Active Record Migration`_.
 
-.. note:: In My Number Keeping System, current step, we only use Timachine for Dynamo DB migrations.
 
 
 
@@ -21,15 +20,6 @@ There are 2 modules inside `timachine project`_:
     The core library of Timachine. It defines the execution logic of abstract migrations, and provide interfaces for outside to implement concrete type of migrations, such as ``VersionProvider``, ``TransactionManager``.
 * timachine-maven-plugin
     Maven plugin for easily execute timachine functions.
-
-And one module in My Number Keeping System project:
-
-* timachine-dynamo
-    Implementation of Dynamo DB migrations, provide base classes to be extended for writing concrete Dynamo DB migrations.
-
-.. note:: `timachine-dynamo` should be moved out from My Number Keeping System project because it is not tightly coupled with it. But before it, `dynamo-lib` module should also become stable and moved out.
-
-.. todo:: Also, this document should be moved out.
 
 Migrations
 ----------
@@ -69,39 +59,27 @@ Timachine recognize a Java class as a migration when it is annotated with ``@Mig
 
 .. code-block:: java
 
-    package jp.co.worksap.mynumber.migrations;
+    package com.worksap.timachine.migrations;
 
-    import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
-    import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
-    import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-    import jp.co.worksap.dynamo.DynamoUtil;
-    import jp.co.worksap.timachine.dynamo.DynamoMigration;
-    import jp.co.worksap.timachine.model.Down;
-    import jp.co.worksap.timachine.model.Migration;
-    import jp.co.worksap.timachine.model.Up;
-
-    import java.util.List;
+    import com.worksap.timachine.model.Down;
+    import com.worksap.timachine.model.Migration;
+    import com.worksap.timachine.model.Up;
 
     @Migration
-    public class M20141106173500CreateMyNumberTable extends DynamoMigration {
-
-        private static final String TABLE_NAME = "MyNumber";
+    public class M20141106173500CreateTable {
 
         @Up
         public void createTable() {
-            ProvisionedThroughput throughput = new ProvisionedThroughput().withReadCapacityUnits(1L).withWriteCapacityUnits(1L);
-            List<AttributeDefinition> attrList = DynamoUtil.createAttrList("checkId", "S");
-            List<KeySchemaElement> elements = DynamoUtil.createKeyElementList("checkId", "HASH");
-            dynamo().createTable(TABLE_NAME, throughput, attrList, elements);
+            //Do something to create the table
         }
 
         @Down
         public void dropTable() {
-            dynamo().deleteTable(TABLE_NAME);
+            //Do something to drop the table
         }
     }
 
-This migration defines the creation & deletion of a Dynamo DB table named "MyNumber", giving the primary hash key "checkId".
+This migration defines the creation & deletion of a DB table.
 
 There are several constraints on a migration file:
 
@@ -144,14 +122,14 @@ Add this plugin into ``pom.xml``
         <plugins>
             ...
             <plugin>
-                <groupId>jp.co.worksap.mynumber</groupId>
+                <groupId>com.worksap.timachine</groupId>
                 <artifactId>timachine-maven-plugin</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>1.1.1-SNAPSHOT</version>
                 <configuration>
-                    <packageName>jp.co.worksap.mynumber.migrations</packageName>
-                    <testPackageName>jp.co.worksap.mynumber.testmigrations</testPackageName>
-                    <templateName>dynamo</templateName>
-                    <executor>jp.co.worksap.timachine.dynamo.DynamoExecutor</executor>
+                    <packageName>com.worksap.timachine.migrations</packageName>
+                    <testPackageName>com.worksap.timachine.testmigrations</testPackageName>
+                    <templateName>migration</templateName>
+                    <executor>com.worksap.timachine.SomeExecutor</executor>
                 </configuration>
             </plugin>
         </plugins>
@@ -174,4 +152,4 @@ Goals
 Use ``mvn timachine:help`` to list all goals and their usage.
 
 .. _Ruby on Rails Active Record Migration: http://api.rubyonrails.org/classes/ActiveRecord/Migration.html
-.. _timachine project: http://192.168.140.36/ate-shanghai/timachine
+.. _timachine project: https://github.com/Timachine/timachine-core
