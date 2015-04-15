@@ -1,9 +1,9 @@
 package ${packageName};
 
 import jp.co.worksap.timachine.dynamo.DynamoMigration;
-import jp.co.worksap.timachine.model.Down;
-import jp.co.worksap.timachine.model.Migration;
-import jp.co.worksap.timachine.model.Up;
+import Down;
+import Migration;
+import Up;
 
 @Migration
 public class ${className} extends DynamoMigration {

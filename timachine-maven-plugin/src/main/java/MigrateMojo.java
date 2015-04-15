@@ -1,6 +1,6 @@
-import jp.co.worksap.timachine.Executor;
-import jp.co.worksap.timachine.model.Migration;
-import jp.co.worksap.timachine.model.Options;
+import com.worksap.timachine.Executor;
+import com.worksap.timachine.model.Migration;
+import com.worksap.timachine.model.Options;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;

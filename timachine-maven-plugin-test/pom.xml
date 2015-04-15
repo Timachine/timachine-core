@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>parent</artifactId>
-        <groupId>jp.co.worksap.timachine</groupId>
-        <version>1.1-SNAPSHOT</version>
+        <groupId>com.worksap.timachine</groupId>
+        <version>1.1.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,22 +13,22 @@
 
     <dependencies>
         <dependency>
-            <groupId>jp.co.worksap.timachine</groupId>
+            <groupId>com.worksap.timachine</groupId>
             <artifactId>timachine-core</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.1.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
         <plugins>
             <plugin>
-                <groupId>jp.co.worksap.timachine</groupId>
+                <groupId>com.worksap.timachine</groupId>
                 <artifactId>timachine-maven-plugin</artifactId>
-                <version>1.1-SNAPSHOT</version>
+                <version>1.1.1-SNAPSHOT</version>
                 <configuration>
                     <packageName>jp.co.worksap.migrations</packageName>
                     <testPackageName>jp.co.worksap.testmigrations</testPackageName>
                     <templateName>migration</templateName>
-                    <executor>jp.co.worksap.timachine.test.FakeExecutor</executor>
+                    <executor>com.worksap.timachine.test.FakeExecutor</executor>
                 </configuration>
             </plugin>
             <plugin>

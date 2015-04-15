@@ -1,9 +1,9 @@
-import jp.co.worksap.timachine.Executor;
-import jp.co.worksap.timachine.Migrations;
-import jp.co.worksap.timachine.VersionChecker;
-import jp.co.worksap.timachine.model.Migration;
-import jp.co.worksap.timachine.model.VersionDifference;
-import jp.co.worksap.timachine.spi.VersionProvider;
+import com.worksap.timachine.Executor;
+import com.worksap.timachine.Migrations;
+import com.worksap.timachine.VersionChecker;
+import com.worksap.timachine.model.Migration;
+import com.worksap.timachine.model.VersionDifference;
+import com.worksap.timachine.spi.VersionProvider;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
