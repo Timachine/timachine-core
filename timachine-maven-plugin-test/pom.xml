@@ -25,17 +25,10 @@
                 <artifactId>timachine-maven-plugin</artifactId>
                 <version>1.1.1-SNAPSHOT</version>
                 <configuration>
-                    <packageName>jp.co.worksap.migrations</packageName>
-                    <testPackageName>jp.co.worksap.testmigrations</testPackageName>
+                    <packageName>com.worksap.migrations</packageName>
+                    <testPackageName>com.worksap.testmigrations</testPackageName>
                     <templateName>migration</templateName>
                     <executor>com.worksap.timachine.test.FakeExecutor</executor>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>

@@ -47,7 +47,7 @@ public class Migrations {
         String version = MigrationNameResolver.validateVersionOf(name);
         metaData.setVersion(version);
         if (!migration.isAnnotationPresent(Migration.class)) {
-            throw new RuntimeException("Annotation \"Migration\" does not exist on class: " + migration.getName());
+            throw new RuntimeException("Annotation \"Migration\" does not exist on class: " + migration.getSimpleName());
         }
 
         List<Method> upMethods = new ArrayList<>();
@@ -61,16 +61,16 @@ public class Migrations {
             }
         }
         if (upMethods.size() == 0) {
-            throw new RuntimeException("Class does not contain a method annotated with \"@Up\"" + migration.getName());
+            throw new RuntimeException("Class does not contain a method annotated with \"@Up\" " + migration.getSimpleName());
         }
         if (upMethods.size() > 1) {
-            throw new RuntimeException("Class contains multiple methods annotated with \"@Up\"" + migration.getName());
+            throw new RuntimeException("Class contains multiple methods annotated with \"@Up\" " + migration.getSimpleName());
         }
         if (downMethods.size() == 0) {
-            throw new RuntimeException("Class does not contain a method annotated with \"@Down\"" + migration.getName());
+            throw new RuntimeException("Class does not contain a method annotated with \"@Down\" " + migration.getSimpleName());
         }
         if (downMethods.size() > 1) {
-            throw new RuntimeException("Class contains multiple methods annotated with \"@Down\"" + migration.getName());
+            throw new RuntimeException("Class contains multiple methods annotated with \"@Down\" " + migration.getSimpleName());
         }
         metaData.setUp(upMethods.get(0));
         metaData.setDown(downMethods.get(0));

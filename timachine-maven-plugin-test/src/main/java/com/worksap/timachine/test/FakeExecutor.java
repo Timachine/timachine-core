@@ -1,8 +1,8 @@
 package com.worksap.timachine.test;
 
-import jp.co.worksap.timachine.Executor;
-import jp.co.worksap.timachine.spi.TransactionManager;
-import jp.co.worksap.timachine.spi.VersionProvider;
+import com.worksap.timachine.Executor;
+import com.worksap.timachine.spi.TransactionManager;
+import com.worksap.timachine.spi.VersionProvider;
 
 import java.util.List;
 

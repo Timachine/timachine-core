@@ -28,6 +28,10 @@ public class Executor {
 
     public void execute(Options options, List<Class<?>> migrationClasses) throws Exception {
         Migrations migrations = new Migrations(migrationClasses);
+        if (migrations.getVersions().size() == 0) {
+            LOGGER.info("Nothing to migrate, no migration found.");
+            return;
+        }
         VersionChecker versionChecker = new VersionChecker(versionProvider, migrations);
         VersionDifference versionDifference = versionChecker.versionDifference(options.getToVersion());
         if (versionDifference.getSteps().isEmpty()) {

@@ -1,8 +1,8 @@
 package com.worksap.migrations;
 
-import jp.co.worksap.timachine.model.Down;
-import jp.co.worksap.timachine.model.Migration;
-import jp.co.worksap.timachine.model.Up;
+import com.worksap.timachine.model.Down;
+import com.worksap.timachine.model.Migration;
+import com.worksap.timachine.model.Up;
 
 @Migration
 public class M20150306122556{

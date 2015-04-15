@@ -38,6 +38,7 @@
     <modules>
         <module>timachine-core</module>
         <module>timachine-maven-plugin</module>
+        <module>timachine-maven-plugin-test</module>
     </modules>
     <build>
         <plugins>

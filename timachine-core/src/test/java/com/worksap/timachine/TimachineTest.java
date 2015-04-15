@@ -108,7 +108,7 @@ public class TimachineTest {
             try {
                 executor.execute(options, migrations);
             } catch (RuntimeException e) {
-                assertEquals("Class does not contain a method annotated with \"@Down\"M20141106171534", e.getMessage());
+                assertEquals("Class does not contain a method annotated with \"@Down\" M20141106171534", e.getMessage());
             }
         } finally {
             migrations.remove(M20141106171534.class);
