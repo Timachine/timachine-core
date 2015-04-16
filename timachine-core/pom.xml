@@ -8,7 +8,9 @@
     <artifactId>timachine-core</artifactId>
     <packaging>jar</packaging>
 
-    <name>timachine-core</name>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>The core logic for data migrations</description>
+    <url>https://github.com/Timachine/timachine-core</url>
 
     <dependencies>
         <dependency>
