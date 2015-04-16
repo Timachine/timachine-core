@@ -1,6 +1,7 @@
 Timachine
 =========
 
-## Documentation
+![Build Status](https://travis-ci.org/Timachine/timachine-core.svg?branch=master)
+Java data migration tool, powered by Works Applications Co.,Ltd
 
-Refer to http://192.168.140.55/timachine.html
+## [Documentation](http://timachine-core.readthedocs.org/en/latest/)
