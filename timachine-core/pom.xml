@@ -7,7 +7,12 @@
     </parent>
     <artifactId>timachine-core</artifactId>
     <packaging>jar</packaging>
-
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>The core logic for data migrations</description>
     <url>https://github.com/Timachine/timachine-core</url>

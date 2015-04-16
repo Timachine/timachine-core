@@ -6,3 +6,8 @@ Timachine
 Java data migration tool, powered by Works Applications Co.,Ltd
 
 ## [Documentation](http://timachine-core.readthedocs.org/en/latest/)
+
+
+## License
+
+Apache License 2.0

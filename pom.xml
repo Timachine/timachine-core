@@ -10,7 +10,21 @@
     <name>${project.groupId}:${project.artifactId}</name>
     <description>A application used to manage data migrations</description>
     <url>https://github.com/Timachine/timachine-core</url>
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
+    <developers>
+        <developer>
+            <name>Liu Yang</name>
+            <email>liu_yang@worksap.co.jp</email>
+            <organization>Works Applications</organization>
+            <organizationUrl>http://www.worksap.com/</organizationUrl>
+        </developer>
+    </developers>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.7</java.version>
