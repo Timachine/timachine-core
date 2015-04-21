@@ -1,7 +1,7 @@
 Timachine
 =========
 
-![Build Status](https://travis-ci.org/Timachine/timachine-core.svg?branch=master)
+[![Build Status](https://travis-ci.org/Timachine/timachine-core.svg?branch=master)](https://travis-ci.org/Timachine/timachine-core)
 
 Java data migration tool, powered by Works Applications Co.,Ltd
 
