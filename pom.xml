@@ -4,7 +4,7 @@
 
     <groupId>com.worksap.timachine</groupId>
     <artifactId>parent</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.2</version>
     <packaging>pom</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -30,6 +30,8 @@
         <java.version>1.7</java.version>
     </properties>
     <scm>
+        <url>git@github.com:Timachine/timachine-core.git</url>
+        <connection>scm:git:git@github.com:Timachine/timachine-core.git</connection>
         <developerConnection>scm:git:git@github.com:Timachine/timachine-core.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
