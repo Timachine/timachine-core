@@ -124,7 +124,7 @@ Add this plugin into ``pom.xml``
             <plugin>
                 <groupId>com.worksap.timachine</groupId>
                 <artifactId>timachine-maven-plugin</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>1.1.2</version>
                 <configuration>
                     <packageName>com.worksap.timachine.migrations</packageName>
                     <testPackageName>com.worksap.timachine.testmigrations</testPackageName>
