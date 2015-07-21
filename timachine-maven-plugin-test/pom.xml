@@ -21,6 +21,17 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <!--
+                        This module is only for test, so we do not have to deploy.
+                        https://github.com/Timachine/timachine-core/pull/4
+                    -->
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>com.worksap.timachine</groupId>
                 <artifactId>timachine-maven-plugin</artifactId>
                 <version>${project.version}</version>
