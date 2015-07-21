@@ -4,7 +4,7 @@
     <parent>
         <artifactId>parent</artifactId>
         <groupId>com.worksap.timachine</groupId>
-        <version>1.1.1-SNAPSHOT</version>
+        <version>1.1.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,15 +15,26 @@
         <dependency>
             <groupId>com.worksap.timachine</groupId>
             <artifactId>timachine-core</artifactId>
-            <version>1.1.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <!--
+                        This module is only for test, so we do not have to deploy.
+                        https://github.com/Timachine/timachine-core/pull/4
+                    -->
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>com.worksap.timachine</groupId>
                 <artifactId>timachine-maven-plugin</artifactId>
-                <version>1.1.1-SNAPSHOT</version>
+                <version>${project.version}</version>
                 <configuration>
                     <packageName>com.worksap.migrations</packageName>
                     <testPackageName>com.worksap.testmigrations</testPackageName>
